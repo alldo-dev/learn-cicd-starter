@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      -name: Install statticcheck
+      -name: install staticcheck
         run: go install honnef.co/go/tools/cmd/staticcheck@latest
 
       -name: run static check
