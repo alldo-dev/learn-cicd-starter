@@ -10,6 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - uses: dominikh/staticcheck-action@v1
+        with:
+          version: "latest"
+
       - name: run formatter
         run: test -z $(go fmt ./...)
 
@@ -28,3 +36,10 @@ jobs:
       
       - name: run tests
         run: go test ./... -cover
+
+      - name: Install gosec
+        run: go install github.com/securego/gosec/v2/cmd/gosec@latest
+
+      - name: run security check
+        run: gosec ./...
+
