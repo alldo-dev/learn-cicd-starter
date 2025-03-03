@@ -5,8 +5,8 @@ on:
     branches: [main]
 
 jobs:
-  Build:
-    name: Build
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -22,9 +22,9 @@ jobs:
         run: |
           chmod +x scripts/buildprod.sh
           scripts/buildprod.sh
-      
-      - name: Create Image
-        run: 'docker build -t alldo-dev/notely:latest .'
+
+      - name: 'Push image'
+        run: 'gcloud builds submit --tag us-central1-docker.pkg.dev/original-nomad-452412-k3/notely-ar-repo/notely:latest .'
 
 
   setup-gcloud:
@@ -42,12 +42,4 @@ jobs:
 
     - name: 'Use gcloud CLI'
       run: 'gcloud info'
-
-  Deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: 'Push image'
-      run: 'gcloud builds submit --tag us-central1-docker.pkg.dev/original-nomad-452412-k3/notely-ar-repo/notely:latest .'
-
+    
