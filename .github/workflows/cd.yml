@@ -22,24 +22,17 @@ jobs:
         run: |
           chmod +x scripts/buildprod.sh
           scripts/buildprod.sh
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
 
       - name: 'Push image'
         run: 'gcloud builds submit --tag us-central1-docker.pkg.dev/original-nomad-452412-k3/notely-ar-repo/notely:latest .'
-
-
-  setup-gcloud:
-    name: Setup gcloud
-    runs-on: ubuntu-latest
-
-    steps:
-    - id: 'auth'
-      uses: 'google-github-actions/auth@v2'
-      with:
-        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-
-    - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v2'
-
-    - name: 'Use gcloud CLI'
-      run: 'gcloud info'
-    
+        
