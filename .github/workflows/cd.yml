@@ -24,6 +24,9 @@ jobs:
           scripts/buildprod.sh
 
   setup-gcloud:
+    name: Setup gcloud
+    runs-on: ubuntu-latest
+
     steps:
     - id: 'auth'
       uses: 'google-github-actions/auth@v2'
@@ -37,6 +40,9 @@ jobs:
       run: 'gcloud info'
 
   push-image-to-google-artifact-registry:
+    name: Push Image
+    runs-on: ubuntu-latest
+
     steps:
     - name: 'Push image'
       run: 'gcloud builds submit --tag us-central1-docker.pkg.dev/original-nomad-452412-k3/notely-ar-repo/notely:latest .'
