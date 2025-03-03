@@ -8,10 +8,16 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: 'Install goose'
+        run: 'go install github.com/pressly/goose/v3/cmd/goose@latest'
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -36,5 +42,11 @@ jobs:
       - name: 'Push image'
         run: 'gcloud builds submit --tag us-central1-docker.pkg.dev/original-nomad-452412-k3/notely-ar-repo/notely:latest .'
 
+      - name: 'Run migrations'
+        run: |
+          chmod +x scripts/migrateup.sh
+          scripts/migrateup.sh
+
+      
       - name: 'Deply to Cloud Run'
         run: 'gcloud run deploy notely --image us-central1-docker.pkg.dev/original-nomad-452412-k3/notely-ar-repo/notely:latest --region us-central1 --allow-unauthenticated --project original-nomad-452412-k3 --max-instances=4'
